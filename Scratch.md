@@ -195,7 +195,7 @@ $$
 V = \frac{1}{2} \vec{\theta}^{\top} H \vec{\theta} \geq 0,
 $$
 
-其中$H$是对称的（半）正定矩阵。
+其中$H$是对称的正定矩阵。
 
 显然，$\frac{dV}{dT} \leq 0$与$\frac{dV}{dt} \leq 0$等价，后面在时间尺度$T$上作进一步分析。
 
@@ -349,70 +349,80 @@ $$
 
 使用Mathematica作图，得到
 <!--Mathematica代码
-A = {
+A1 = {
    {1 - p/2, 1 - d/2},
    {-p, 1 - d}
    };
-H = {
+H1 = {
    {1, 0},
    {0, 1}
    };
-\[Lambda] = 0.001;
-\[Phi][p_, d_] := 
-  MatrixPower[Transpose[A], n].H/2. (2*n*MatrixPower[A, n - 1] + \[Lambda]*MatrixPower[A, n]);
-c1 = ContourPlot[
-  Det[(\[Phi][p, d] /. n -> 1)], {p, -5, 10}, {d, -5, 10},
-  Contours -> {0},
-  ColorFunction -> (If[#1 > 0, White, LightGray] &),
-  PlotLabel -> Style["\!\(\*
-StyleBox[\"n\",\nFontSlant->\"Italic\"]\) = 1", Black, 25]
-  ]
-(*直接等于0会奇异*)
-c2 = ContourPlot[
-  Det[(\[Phi][p, d] /. n -> 2)], {p, -5, 10}, {d, -5, 10},
-  Contours -> {0.005},
-  ColorFunction -> (If[#1 > 0, White, LightGray] &),
-  PlotLabel -> Style["\!\(\*
-StyleBox[\"n\",\nFontSlant->\"Italic\"]\) = 2", Black, 25]
-  ]
-c3 = ContourPlot[
-  Det[(\[Phi][p, d] /. n -> 3)], {p, -5, 10}, {d, -5, 10},
-  Contours -> {0},
-  ColorFunction -> (If[#1 > 0, White, LightGray] &),
-  PlotLabel -> Style["\!\(\*
-StyleBox[\"n\",\nFontSlant->\"Italic\"]\) = 3", Black, 25]
-  ]
-c4 = ContourPlot[
-  Det[(\[Phi][p, d] /. n -> 4)], {p, -5, 10}, {d, -5, 10},
-  Contours -> {0},
-  ColorFunction -> (If[#1 > 0, White, LightGray] &),
-  PlotLabel -> Style["\!\(\*
-StyleBox[\"n\",\nFontSlant->\"Italic\"]\) = 4", Black, 25]
-  ]
-c9 = ContourPlot[
-  Det[(\[Phi][p, d] /. n -> 9)], {p, -5, 10}, {d, -5, 10},
-  Contours -> {0},
-  ColorFunction -> (If[#1 > 0, White, LightGray] &),
-  PlotLabel -> Style["\!\(\*
-StyleBox[\"n\",\nFontSlant->\"Italic\"]\) = 9", Black, 25]
-  ]
-c10 = ContourPlot[
-  Det[(\[Phi][p, d] /. n -> 10)], {p, -5, 10}, {d, -5, 10},
-  Contours -> {0},
-  ColorFunction -> (If[#1 > 0, White, LightGray] &),
-  PlotLabel -> Style["\!\(\*
-StyleBox[\"n\",\nFontSlant->\"Italic\"]\) = 10", Black, 25]
-  ]
+\[Lambda]1 = \[Lambda];
+\[Phi]1[n_] := FullSimplify[
+   MatrixPower[Transpose[A1], n].H1/
+     2. (2*n*MatrixPower[A1, n - 1] + \[Lambda]1*MatrixPower[A1, n])
+   ];
+GraphicsGrid[
+ ArrayReshape[{
+   Table[
+    ContourPlot[
+     Det[\[Phi]1[n]], {p, -4.5, 8.5}, {d, -4.5, 8.5},
+     Contours -> {0},
+     (*保证阴影能画出来*)
+     ColorFunction -> (If[#1 > 0.01, White, LightBlue] &),
+     PlotLabel -> Style[StringJoin["\!\(\*
+StyleBox[\"n\",\nFontSlant->\"Italic\"]\) = ", ToString[n]], Black, 
+       15], FrameLabel -> {Style["\!\(\*
+StyleBox[\"p\",\nFontSlant->\"Italic\"]\)", 10], Style["\!\(\*
+StyleBox[\"d\",\nFontSlant->\"Italic\"]\)", 10]}
+     ],
+    {n, 1, 9}
+    ]
+   }, {3, 3}]]
 -->
 
-![n = 1](images/2023-04-11-12-29-57.png)
-![n = 2](images/2023-04-11-12-30-34.png)
-![n = 3](images/2023-04-11-12-31-08.png)
-![n = 4](images/2023-04-11-12-31-46.png)
-![n = 9](images/2023-04-11-12-41-25.png)
-![n = 10](images/2023-04-11-12-41-53.png)
+![通过求解ODE方法得到的$p-d$ 稳定性区域](images/2023-04-11-17-12-20.png)
 
-相当耗时，且容易遇到数值求解的奇异性。此外，对无穷多个$n$作图再取交集是不现实的，对于更复杂的系统也不具备普适性。
+类似地，通过前向欧拉法得到的结果如下：
+
+<!--Mathematica代码
+A2 = {
+   {1, 1, 1/2},
+   {0, 1, 1},
+   {-p, -d, 0}
+   };
+H2 = {
+   {1, 0, 0},
+   {0, 1, 0},
+   {0, 0, 1}
+   };
+\[Lambda]2 = \[Lambda];
+\[Phi]2[n_] := FullSimplify[
+   MatrixPower[Transpose[A2], n].H2/
+     2. (2*n*MatrixPower[A2, n - 1] + \[Lambda]2*MatrixPower[A2, n])
+   ];
+GraphicsGrid[
+ ArrayReshape[{
+   Table[
+    ContourPlot[
+     Det[\[Phi]2[n]], {p, -4.5, 8.5}, {d, -4.5, 8.5},
+     Contours -> {0},
+     (*保证阴影能画出来*)
+     ColorFunction -> (If[#1 > 0.01, White, LightBlue] &),
+     PlotLabel -> Style[StringJoin["\!\(\*
+StyleBox[\"n\",\nFontSlant->\"Italic\"]\) = ", ToString[n]], Black, 
+       15], FrameLabel -> {Style["\!\(\*
+StyleBox[\"p\",\nFontSlant->\"Italic\"]\)", 10], Style["\!\(\*
+StyleBox[\"d\",\nFontSlant->\"Italic\"]\)", 10]}
+     ],
+    {n, 1, 9}
+    ]
+   }, {3, 3}]]
+-->
+
+![通过求解ODE方法得到的$p-d$ 稳定性区域](images/2023-04-11-17-16-07.png)
+
+这种方式相当耗时，且容易遇到数值求解的奇异性。此外，对无穷多个$n$作图，然后再取交集是不现实的，对于更复杂的系统也不具备普适性。
 
 不妨考虑这样一个问题。若存在$\{ p_{i} \}$和$\{ d_{i} \}$的解集，假设其边界为$\Gamma (\vec{p}, \vec{d}) = 0$，则对应于的曲线$\Gamma (\vec{p}, \vec{d}) = 0$恰好将$\{p_{i}, d_{i} \}$空间中的点的集合$S$分为两个子集：$\forall n \in \N, \Gamma (n) \leq 0$的点集$M$，以及对应于不能使得系统按要求收敛的点集$\complement_{S}{M}$。
 
