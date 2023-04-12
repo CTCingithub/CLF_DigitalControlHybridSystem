@@ -5,7 +5,7 @@
 对于如下线性系统：
 
 $$
-\dot{\vec{\theta}} = \mathcal{A} \vec{\theta} + \mathcal{B} \left. \vec{\theta} \right |_{t=(n-1)\tau},\qquad t\in[n\tau, (n+1)\tau),n \in \N,
+\dot{\vec{\theta}} = \mathcal{A} \vec{\theta} + \mathcal{B} \left. \vec{\theta} \right |_{t=(n-1)\tau},\qquad t\in[n\tau, (n+1)\tau),n \in \mathbb{N},
 $$
 
 可求解常微分方程得到：
@@ -54,7 +54,7 @@ Show[{Graphics[{style, FaceForm[White], rectangle, arrow, label,
 物体的动力学方程为：
 
 $$
-\ddot{x} = - \frac{k_{p}}{m} \left. x \right |_{t=n \tau} - \frac{k_{d}}{m} \left. \dot{x} \right |_{t=n \tau}, \qquad t \in [n\tau, (n+1)\tau),n \in \N,
+\ddot{x} = - \frac{k_{p}}{m} \left. x \right |_{t=n \tau} - \frac{k_{d}}{m} \left. \dot{x} \right |_{t=n \tau}, \qquad t \in [n\tau, (n+1)\tau),n \in \mathbb{N},
 $$
 
 令$T=\frac{t}{\tau}$，则有：
@@ -75,7 +75,7 @@ $$
 对于例1，改变时间尺度为$T$，得到：
 
 $$
-x'' = -\frac{k_{p} \tau^{2}}{m} \left. x \right |_{T=n-1} - \frac{k_{d} \tau}{m} \left. x' \right |_{T=n-1}, \qquad T \in [n,n+1),n \in \N,
+x'' = -\frac{k_{p} \tau^{2}}{m} \left. x \right |_{T=n-1} - \frac{k_{d} \tau}{m} \left. x' \right |_{T=n-1}, \qquad T \in [n,n+1),n \in \mathbb{N},
 $$
 
 令
@@ -87,7 +87,7 @@ $$
 简化了动力学方程的形式：
 
 $$
-x'' = -p x_{n-1} - d x'_{n-1}, \qquad T \in [n,n+1),n \in \N.
+x'' = -p x_{n-1} - d x'_{n-1}, \qquad T \in [n,n+1),n \in \mathbb{N}.
 $$
 
 使用**求解ODE**的方法，定义：
@@ -106,7 +106,7 @@ $$
 \end{bmatrix} \overrightarrow{{}^{1}\theta} + \begin{bmatrix}
     0 & 0 \\ -p & -d
 \end{bmatrix} \overrightarrow{{}^{1}\theta}_{n}, \qquad
-T \in [n, (n+1)),n \in \N,
+T \in [n, (n+1)),n \in \mathbb{N},
 $$
 
 可知
@@ -192,7 +192,7 @@ graph LR
 若对于某个系统，函数$V$满足：
 
 $$
-V > 0, \qquad \frac{dV}{dt} < 0, \qquad \forall \vec{x} \in \R^{n} \backslash \vec{x}_{e}.
+V > 0, \qquad \frac{dV}{dt} < 0, \qquad \forall \vec{x} \in \mathbb{R}^{n} \backslash \vec{x}_{e}.
 $$
 
 则平衡点$\vec{x}_{e}$就是渐近稳定的。对应地，这里的李雅普诺夫函数就被称为**控制李亚普诺夫函数**(Control Lyapunov Function)，简称**CLF**。
@@ -200,7 +200,7 @@ $$
 由于
 
 $$
-V > 0, \qquad \frac{dV}{dt} < 0, \qquad \forall \vec{x} \in \R^{n} \backslash \vec{x}_{e}.
+V > 0, \qquad \frac{dV}{dt} < 0, \qquad \forall \vec{x} \in \mathbb{R}^{n} \backslash \vec{x}_{e}.
 $$
 
 因此，存在$\lambda > 0$，使得
@@ -218,7 +218,7 @@ $$
 对于线性控制系统施加数字采样PD控制，通过求解ODE或者前向欧拉法，可得到系统状态量的离散演化规律：
 
 $$
-\vec{\theta}_{n+1} = A \vec{\theta}_{n}, \qquad n \in \N.
+\vec{\theta}_{n+1} = A \vec{\theta}_{n}, \qquad n \in \mathbb{N}.
 $$
 
 定义二次型形式的CLF函数：
@@ -260,7 +260,7 @@ $$
 稳定性的充分条件为，能找到$\{ p_{i} \}$和$\{ d_{i} \}$组合，使得
 
 $$
-\frac{dV}{dT} \leq 0, \qquad n \in \N,
+\frac{dV}{dT} \leq 0, \qquad n \in \mathbb{N},
 $$
 
 类似传统的CLF设计，为保证收敛速度，引入参数$\lambda$，求解$\{ p_{i} \}$和$\{ d_{i} \}$的取值范围，使得对于$n \in \N$，有：
@@ -293,7 +293,7 @@ $$
 $$
 \begin{equation}
     \begin{aligned}
-        &&\forall n \in \N, \\
+        &&\forall n \in \mathbb{N}, \\
         &&\quad \Gamma_{1} (n) &= \det{(\Phi_{1} (n))} \\
         &&&= \det{\Bigg(\bigg (A^{\top} \bigg)^{n} \frac{H}{2} \bigg(2n A^{n-1} + \lambda A^{n} \bigg)\Bigg)} \leq 0.
     \end{aligned}
@@ -305,7 +305,7 @@ $$
 讨论$T \in (n,n+1)$情况。对于线性系统：
 
 $$
-\dot{\vec{\theta}} = \mathcal{A} \vec{\theta} + \mathcal{B} \left. \vec{\theta} \right |_{t=(n-1)\tau},\qquad t\in(n\tau, (n+1)\tau),n \in \N,
+\dot{\vec{\theta}} = \mathcal{A} \vec{\theta} + \mathcal{B} \left. \vec{\theta} \right |_{t=(n-1)\tau},\qquad t\in(n\tau, (n+1)\tau),n \in \mathbb{N},
 $$
 
 可求解常微分方程得到：
@@ -340,7 +340,7 @@ $$
 $$
 \begin{equation}
     \begin{aligned}
-        &&\forall n \in \N,\\
+        &&\forall n \in \mathbb{N},\\
         &&\Gamma_{2} (n) &= \det{(\Phi_{2} (n))} \\
         &&&= \det{\Bigg(\bigg (A^{\top} A_{T_{1}}^{\top} \bigg)^{n} \frac{H}{2} \bigg(2 \frac{d(A_{T_{1}})}{dT_{1}} + A_{T_{1}} \bigg) A^{n} \Bigg)} \leq 0.
     \end{aligned}
@@ -456,7 +456,7 @@ StyleBox[\"d\",\nFontSlant->\"Italic\"]\)", 10]}
 
 这种方式相当耗时，且容易遇到数值求解的奇异性。此外，对无穷多个$n$作图，然后再取交集是不现实的，对于更复杂的系统也不具备普适性。
 
-不妨考虑这样一个问题。若存在$\{ p_{i} \}$和$\{ d_{i} \}$的解集，假设其边界为$\Gamma (\vec{p}, \vec{d}) = 0$，则对应于的曲线$\Gamma (\vec{p}, \vec{d}) = 0$恰好将$\{p_{i}, d_{i} \}$空间中的点的集合$S$分为两个子集：$\forall n \in \N, \Gamma (n) \leq 0$的点集$M$，以及对应于不能使得系统按要求收敛的点集$\complement_{S}{M}$。
+不妨考虑这样一个问题。若存在$\{ p_{i} \}$和$\{ d_{i} \}$的解集，假设其边界为$\Gamma (\vec{p}, \vec{d}) = 0$，则对应于的曲线$\Gamma (\vec{p}, \vec{d}) = 0$恰好将$\{p_{i}, d_{i} \}$空间中的点的集合$S$分为两个子集：$\forall n \in \mathbb{N}, \Gamma (n) \leq 0$的点集$M$，以及对应于不能使得系统按要求收敛的点集$\complement_{S}{M}$。
 
 可见，寻找包络线$\Gamma (\vec{p}, \vec{d}) = 0$可以转化为一个**二分类问题**。
 
@@ -487,7 +487,7 @@ StyleBox[\"d\",\nFontSlant->\"Italic\"]\)", 10]}
    然后可以根据$M$和$\complement_{S}{M}$的数据，训练二分类问题;
 
 2. **负值等势线法**。
-   $\forall \delta_{k} \in \R^{-}$，通过数值求解，得到$\Gamma_{1} (n) = \delta_{k}$上的点集$(p_{i}, d_{i})$。
+   $\forall \delta_{k} \in \mathbb{R}^{-}$，通过数值求解，得到$\Gamma_{1} (n) = \delta_{k}$上的点集$(p_{i}, d_{i})$。
 
    将点集$(p_{i}, d_{i})$按照如下方式分类为满足要求的集合$M$和不能使得系统按要求收敛的点集$\complement_{S}{M}$：
 
