@@ -179,7 +179,39 @@ $$
 
 ## 2. CLF函数
 
-(之后再补充)
+<!--参考了https://zhuanlan.zhihu.com/p/493456068-->
+
+系统稳定的充要条件是**能找得到Lyapunov函数**$V$，使得$V > 0$且$\frac{dV}{dt} < 0$。可见，**给定的函数$V$满足要求**是系统稳定的**充分条件**。关系展示如下：
+
+```mermaid
+graph LR
+ A[系统稳定] <-- 充要条件 --> B[函数V存在];
+ C[给定的V满足条件] -- 必要条件 --> A
+```
+
+若对于某个系统，函数$V$满足：
+
+$$
+V > 0, \qquad \frac{dV}{dt} < 0, \qquad \forall \vec{x} \in \R^{n} \backslash \vec{x}_{e}.
+$$
+
+则平衡点$\vec{x}_{e}$就是渐近稳定的。对应地，这里的李雅普诺夫函数就被称为**控制李亚普诺夫函数**(Control Lyapunov Function)，简称**CLF**。
+
+由于
+
+$$
+V > 0, \qquad \frac{dV}{dt} < 0, \qquad \forall \vec{x} \in \R^{n} \backslash \vec{x}_{e}.
+$$
+
+因此，存在$\lambda > 0$，使得
+
+$$
+\frac{dV}{dt} + \lambda V \leq 0.
+$$
+
+可见，若给定CLF函数$V(\vec{x}, \vec{u})$以及常数$\lambda$，即可控制系统的**指数收敛速度**。如下图所示：
+
+![CLF函数的指数稳定](images/2023-04-12-14-48-12.png)
 
 ## 3. 通过二次型CLF得到稳定性充分条件
 
@@ -202,7 +234,7 @@ $$
 由于，
 
 $$
-n = Floor (\frac{t}{\tau}) = Floor(T).
+n = Floor \bigg(\frac{t}{\tau} \bigg) = Floor(T).
 $$
 
 因此，可以将$T$写为如下形式：
@@ -427,3 +459,45 @@ StyleBox[\"d\",\nFontSlant->\"Italic\"]\)", 10]}
 不妨考虑这样一个问题。若存在$\{ p_{i} \}$和$\{ d_{i} \}$的解集，假设其边界为$\Gamma (\vec{p}, \vec{d}) = 0$，则对应于的曲线$\Gamma (\vec{p}, \vec{d}) = 0$恰好将$\{p_{i}, d_{i} \}$空间中的点的集合$S$分为两个子集：$\forall n \in \N, \Gamma (n) \leq 0$的点集$M$，以及对应于不能使得系统按要求收敛的点集$\complement_{S}{M}$。
 
 可见，寻找包络线$\Gamma (\vec{p}, \vec{d}) = 0$可以转化为一个**二分类问题**。
+
+关于生成数据集的方式：
+
+1. **蒙特卡洛法**。
+   定义判断是否为负数的函数为:
+
+   $$
+   \alpha (x) = \left \{ \begin{aligned}
+   &0, & \qquad & x \geq 0, \\
+   &1, && x < 0.
+   \end{aligned}
+   \right.
+   $$
+
+   将点集$(p_{i}, d_{i})$按照如下方式分类为满足要求的集合$M$和不能使得系统按要求收敛的点集$\complement_{S}{M}$：
+
+   $$
+   (p_{i},d_{i}) \in \left \{
+    \begin{aligned}
+        &M, & \qquad & \prod_{j=1}^{n} \alpha \bigg (\left. \Gamma_{1} (j) \right |_{p_{i}, d_{i}} \bigg) = 1, \\
+        &\complement_{S}{M}, && \prod_{i=j}^{n} \alpha \bigg (\left. \Gamma_{1} (j) \right |_{p_{i}, d_{i}} \bigg) = 0.
+    \end{aligned}
+    \right.
+   $$
+
+   然后可以根据$M$和$\complement_{S}{M}$的数据，训练二分类问题;
+
+2. **负值等势线法**。
+   $\forall \delta_{k} \in \R^{-}$，通过数值求解，得到$\Gamma_{1} (n) = \delta_{k}$上的点集$(p_{i}, d_{i})$。
+
+   将点集$(p_{i}, d_{i})$按照如下方式分类为满足要求的集合$M$和不能使得系统按要求收敛的点集$\complement_{S}{M}$：
+
+   $$
+   (p_{i},d_{i}) \in \left \{
+    \begin{aligned}
+        &M, & \qquad & \prod_{j=1}^{n} \alpha \bigg (\left. \Gamma_{1} (j) \right |_{p_{i}, d_{i}} \bigg) = 1, \\
+        &\complement_{S}{M}, && \prod_{i=j}^{n} \alpha \bigg (\left. \Gamma_{1} (j) \right |_{p_{i}, d_{i}} \bigg) = 0.
+    \end{aligned}
+    \right.
+   $$
+
+   然后可以根据$M$和$\complement_{S}{M}$的数据，训练二分类问题。
