@@ -263,7 +263,7 @@ $$
 \frac{dV}{dT} \leq 0, \qquad n \in \mathbb{N},
 $$
 
-类似传统的CLF设计，为保证收敛速度，引入参数$\lambda$，求解$\{ p_{i} \}$和$\{ d_{i} \}$的取值范围，使得对于$n \in \N$，有：
+类似传统的CLF设计，为保证收敛速度，引入参数$\lambda$，求解$\{ p_{i} \}$和$\{ d_{i} \}$的取值范围，使得对于$n \in \mathbb{N}$，有：
 
 $$
 \frac{dV \bigg(\vec{p}, \vec{d} \bigg)}{dT} + \lambda V \bigg(\vec{p}, \vec{d} \bigg) \leq 0.
@@ -380,79 +380,32 @@ H = \begin{bmatrix}
 $$
 
 使用Mathematica作图，得到
-<!--Mathematica代码
-A1 = {
-   {1 - p/2, 1 - d/2},
-   {-p, 1 - d}
-   };
-H1 = {
-   {1, 0},
-   {0, 1}
-   };
-\[Lambda]1 = \[Lambda];
-\[Phi]1[n_] := FullSimplify[
-   MatrixPower[Transpose[A1], n].H1/
-     2. (2*n*MatrixPower[A1, n - 1] + \[Lambda]1*MatrixPower[A1, n])
-   ];
-GraphicsGrid[
- ArrayReshape[{
-   Table[
-    ContourPlot[
-     Det[\[Phi]1[n]], {p, -4.5, 8.5}, {d, -4.5, 8.5},
-     Contours -> {0},
-     (*保证阴影能画出来*)
-     ColorFunction -> (If[#1 > 0.01, White, LightBlue] &),
-     PlotLabel -> Style[StringJoin["\!\(\*
-StyleBox[\"n\",\nFontSlant->\"Italic\"]\) = ", ToString[n]], Black, 
-       15], FrameLabel -> {Style["\!\(\*
-StyleBox[\"p\",\nFontSlant->\"Italic\"]\)", 10], Style["\!\(\*
-StyleBox[\"d\",\nFontSlant->\"Italic\"]\)", 10]}
-     ],
-    {n, 1, 9}
-    ]
-   }, {3, 3}]]
--->
 
-![通过求解ODE方法得到的$p-d$ 稳定性区域](images/2023-04-11-17-12-20.png)
+![通过求解ODE方法得到的$p-d$稳定性区域](images/2023-04-13-22-16-30.png)
 
-类似地，通过前向欧拉法得到的结果如下：
+类似地，通过前向欧拉法，则
 
-<!--Mathematica代码
-A2 = {
-   {1, 1, 1/2},
-   {0, 1, 1},
-   {-p, -d, 0}
-   };
-H2 = {
-   {1, 0, 0},
-   {0, 1, 0},
-   {0, 0, 1}
-   };
-\[Lambda]2 = \[Lambda];
-\[Phi]2[n_] := FullSimplify[
-   MatrixPower[Transpose[A2], n].H2/
-     2. (2*n*MatrixPower[A2, n - 1] + \[Lambda]2*MatrixPower[A2, n])
-   ];
-GraphicsGrid[
- ArrayReshape[{
-   Table[
-    ContourPlot[
-     Det[\[Phi]2[n]], {p, -4.5, 8.5}, {d, -4.5, 8.5},
-     Contours -> {0},
-     (*保证阴影能画出来*)
-     ColorFunction -> (If[#1 > 0.01, White, LightBlue] &),
-     PlotLabel -> Style[StringJoin["\!\(\*
-StyleBox[\"n\",\nFontSlant->\"Italic\"]\) = ", ToString[n]], Black, 
-       15], FrameLabel -> {Style["\!\(\*
-StyleBox[\"p\",\nFontSlant->\"Italic\"]\)", 10], Style["\!\(\*
-StyleBox[\"d\",\nFontSlant->\"Italic\"]\)", 10]}
-     ],
-    {n, 1, 9}
-    ]
-   }, {3, 3}]]
--->
+$$
+\vec{\theta} = \overrightarrow{{}^{2}\theta} = \begin{pmatrix}
+    x \\ x' \\x''
+\end{pmatrix}, \qquad
+A = {}^{2} A = \begin{bmatrix}
+    1 & 1 & \frac{1}{2} \\
+    0 & 1 & 1 \\
+    -p & -d & 0
+\end{bmatrix}, \qquad
+H = \begin{bmatrix}
+    1 & 0 & 0 \\
+    0 & 1 & 0 \\
+    0 & 0 & 0.001
+\end{bmatrix}.
+$$
 
-![通过求解ODE方法得到的$p-d$ 稳定性区域](images/2023-04-11-17-16-07.png)
+这里为了$H$正定，给加速度加上了一个小权重。
+
+得到的结果如下：
+
+![通过前向欧拉法得到的$p-d$稳定性区域](images/2023-04-13-22-17-44.png)
 
 这种方式相当耗时，且容易遇到数值求解的奇异性。此外，对无穷多个$n$作图，然后再取交集是不现实的，对于更复杂的系统也不具备普适性。
 
@@ -460,31 +413,32 @@ StyleBox[\"d\",\nFontSlant->\"Italic\"]\)", 10]}
 
 可见，寻找包络线$\Gamma (\vec{p}, \vec{d}) = 0$可以转化为一个**二分类问题**。
 
-关于生成数据集的方式：
+定义判断是否为负数的函数为:
 
-1. **蒙特卡洛法**。
-   定义判断是否为负数的函数为:
+$$
+\alpha (x) = \left \{ \begin{aligned}
+    &0, & \qquad & x \geq 0, \\
+    &1, && x < 0.
+    \end{aligned}
+    \right.
+$$
 
-   $$
-   \alpha (x) = \left \{ \begin{aligned}
-   &0, & \qquad & x \geq 0, \\
-   &1, && x < 0.
-   \end{aligned}
-   \right.
-   $$
+将点集$(p_{i}, d_{i})$按照如下方式分类为满足要求的集合$M$和不能使得系统按要求收敛的点集$\complement_{S}{M}$。
 
-   将点集$(p_{i}, d_{i})$按照如下方式分类为满足要求的集合$M$和不能使得系统按要求收敛的点集$\complement_{S}{M}$：
-
-   $$
-   (p_{i},d_{i}) \in \left \{
+$$
+(p_{i},d_{i}) \in \left \{
     \begin{aligned}
         &M, & \qquad & \prod_{j=1}^{n} \alpha \bigg (\left. \Gamma_{1} (j) \right |_{p_{i}, d_{i}} \bigg) = 1, \\
         &\complement_{S}{M}, && \prod_{i=j}^{n} \alpha \bigg (\left. \Gamma_{1} (j) \right |_{p_{i}, d_{i}} \bigg) = 0.
     \end{aligned}
     \right.
-   $$
+$$
 
-   然后可以根据$M$和$\complement_{S}{M}$的数据，训练二分类问题;
+然后可以根据$M$和$\complement_{S}{M}$的数据，训练二分类问题
+
+关于生成数据集的方式：
+
+1. **蒙特卡洛法**。找到某个区域，取遍数据点;
 
 2. **负值等势线法**。
    $\forall \delta_{k} \in \mathbb{R}^{-}$，通过数值求解，得到$\Gamma_{1} (n) = \delta_{k}$上的点集$(p_{i}, d_{i})$。
