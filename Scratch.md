@@ -12,9 +12,9 @@ $$
 
 $$
 \begin{aligned}
-    \left. \vec{\theta} \right |_{t=(n+1)\tau} &= \exp{(\mathcal{A} \tau)} \left. \vec{\theta} \right |_{t=n\tau} + \int_{0}^{\tau} \exp{(\mathcal{A} t_0)} dt_0 \mathcal{B} \left. \vec{\theta} \right |_{t=n\tau} \\
-    &= \Bigg (\exp{(\mathcal{A} \tau)} + \bigg (\int_{0}^{\tau} \exp{(\mathcal{A} t_0)} dt_0 \bigg) \mathcal{B} \Bigg) \left. \vec{\theta} \right |_{t=n\tau} \\
-    &= A \left. \vec{\theta} \right |_{t=n \tau},
+    \left. \vec{\theta} \right |_{t=(n+1)\tau} &= \exp{(\mathcal{A} \tau)} \left. \vec{\theta} \right |_{t=n\tau} + \int_{0}^{\tau} \exp{(\mathcal{A} t_0)} dt_0 \mathcal{B} \left. \vec{\theta} \right |_{t = (n - 1) \tau} \\
+    \left. \vec{\theta} \right |_{t=(n+1)\tau} &= {}^{0}A \left. \vec{\theta} \right |_{t=n\tau} + {}^{0}B \left. \vec{\theta} \right |_{t = (n - 1) \tau} \\
+    \left. \vec{\theta} \right |_{t=(n+1)\tau} &= ???
 \end{aligned}
 $$
 
@@ -105,7 +105,7 @@ $$
     0 & 1 \\ 0 & 0
 \end{bmatrix} \overrightarrow{{}^{1}\theta} + \begin{bmatrix}
     0 & 0 \\ -p & -d
-\end{bmatrix} \overrightarrow{{}^{1}\theta}_{n}, \qquad
+\end{bmatrix} \overrightarrow{{}^{1}\theta}_{n - 1}, \qquad
 T \in [n, (n+1)),n \in \mathbb{N},
 $$
 
