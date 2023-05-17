@@ -19,7 +19,13 @@ $$
 \end{aligned}
 $$
 
-其中，$\mathrm{Gain}$是表示增益组合的元组，不是某一个矩阵。
+其中，$\mathrm{Gain}$是表示增益组合的元组，不是某一个矩阵。$\Theta_{N}$由一系列采样时刻的状态量拼接而来：
+
+$$
+\Theta_{N} = \begin{pmatrix}
+    \vec{x}_{N} \\ \vec{x}_{N - 1} \\ \vdots \\ \vec{X}_{N - M}
+\end{pmatrix}
+$$
 
 则状态空间方程可写为：
 
